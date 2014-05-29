@@ -1,0 +1,7 @@
+<h3>You have $<%=(session[:money_amt]).to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse%>.</h3>
+<h3>How much would you like to bet?</h3>
+<form action="/bet" method="post">
+	<input type="text" name="bet_amt"/>
+	<br/>
+	<input type="submit" value = "Submit" class="btn"/>
+</form>

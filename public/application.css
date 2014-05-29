@@ -1,0 +1,35 @@
+form#hit {
+	float: left;
+	margin-right: 10px;
+}
+
+form#stay {
+	float: left;
+}
+
+
+img.card_image {
+	margin: 0px 5px 5px 0px;
+}
+
+body {
+  background-color: #FAF9F5;
+  color: #48362A;
+}
+
+.well {
+  border-radius: 10px;
+  background-color: #E5E3D8;
+}
+
+.navbar-inner {
+background-color: #E5E3D8;
+color: #48362A;
+background-image: none;
+box-shadow: none;
+border-top: none;
+}
+
+.nav {
+color: #48362A;
+}

@@ -1,0 +1,84 @@
+<div id='game'>
+  <div class="container">
+    <%if @losing %>
+      <h3><div class="alert alert-error"><%=@losing%></div></h3>
+    <% end %>
+	<%if @winning %>
+		<h3><div class="alert alert-success"><%=@winning%></div></h3>
+	<% end %>
+	<%if @equal %>
+		<h3><div class="alert alert-warning"><%=@equal%></div></h3>
+	<% end %>
+  </div>
+<!-- <h1>Blackjack!</h1> -->
+
+<% if @welcome %>
+	<h2>Welcome <%= session[:player_name] %>.</h2>
+<% end %>
+
+
+<div class = "well" id ='dealer_area'>
+<h3>Dealer's hand:</h3>
+	<% if @dealer_show_first == false %>
+	    <img src='/images/cards/cover.jpg' class='card_image'>
+		<% 1.upto(session[:hand_dealer].length-1) do |i| %>
+			<%= display_card(session[:hand_dealer][i]) %>
+		<% end %>
+	<% else %>
+		<% 0.upto(session[:hand_dealer].length-1) do |i| %>
+			<%= display_card(session[:hand_dealer][i]) %>
+		<% end %>
+	<% end %>
+
+<% if @dealer_show_first == true %>
+	<h3>Dealer's total is <%= session[:total_dealer].to_s %></h3>
+<% end %>
+	
+
+
+
+</div>
+
+<br/>
+
+<div class = "well" id ='player_area'>
+<h3><%= session[:player_name] %>'s hand:</h3>
+	<% session[:hand_player].each do |card| %>
+		<%= display_card(card) %>
+	<% end %>
+<h3><%= session[:player_name] %>'s total is <%= session[:total_player].to_s %></h3>
+</div>
+
+
+
+<p>
+<% if @hit_stay_buttons %>
+	<h3><%= session[:player_name] %>, would you like to hit or stay?</h3>
+	<!-- <p id="action_buttons"> -->
+		<form id ="hit" action="/game/player/hit" method="POST">
+			<input type="submit" value="Hit " class="btn btn-success btn-large" />
+		</form>
+		<form id="stay" action="/game/player/stay" method="POST"> 
+			<input type="submit" value="Stay" class="btn btn-danger btn-large" />
+		</form>
+	<!-- </p> -->
+<% end %>
+
+<% if @dealer_show_buttons %>
+<p></p>
+	<h3>Click to reveal Dealer's next card</h3>
+	<p id="action_buttons">
+		<form id ="next" action="/game/dealer/hit" method="POST">
+			<input type="submit" value="Dealer Hits →" class="btn btn-primary btn-large" />
+		</form>
+	</p>
+<% end %>
+
+<% if @play_again_button %>
+	<form id = "play_again" action="/" method="POST">
+		<input type = "submit" value = "Play Again" class = "btn btn-primary btn-large"/>
+	</form>
+<% end %>
+
+</p>
+</div>

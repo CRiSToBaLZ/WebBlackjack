@@ -1,0 +1,94 @@
+Quiz: Lesson 3
+
+Please review this quiz, which covers lesson 3 materials.
+
+
+
+1.What is HTML? What is CSS? What is Javascript?
+
+HTML stands for HyperText Markup Language and is the Internet's main publshing language.  It is made up of elements, which define the published content's type.  The elements contain attributes which specify additional information about the elements.
+
+CSS stands for Cascading Style Sheets and works in tandem with HTML under a system of rules to add more style, formatting and layout to web pages.
+
+Javascript is a scripting language that is more complicated and powerful than CSS and works in tandem with HTML to add behavior to web pages.
+
+
+
+2. What are the major parts of an HTTP request?
+
+HTTP Request Method (e.g. GET, POST)
+
+Uniform Resource Identifier (address of document)
+
+Protocol Version (e.g. HTTP 1.1)
+
+HTTP Request Headers (header used by client to give server extra information about request)
+
+HTTP Request Body (contains data sent by the client to the server)
+
+
+
+3. What are the major parts of an HTTP response?
+
+Status Line (includes status code-reason phrases such as 200 OK, 404 Not Found)
+
+Response Headers (various name-value pairs)
+
+Response Message Body (contains data sent from the server to the client)
+
+
+
+4. How do you submit an HTTP POST request, with a "username" attribute set to "bob"? What if we wanted a GET request instead?
+
+For the POST request the username attribute would go in the HTTP Message Body.  For the GET request the username attribute would go in the URL.
+
+
+5. Why is it important for us, as web developers, to understand that HTTP is a "stateless" protocol?
+
+Because it is like having a conversation with someone who can respond intelligently to what you just said but then upon responding immediately forgets the conversation and has to be reminded of it all over again.  Thus we need to create workarounds such as the Sesssion object to emulate more of a useful, stateful environment.
+
+
+
+6. If the internet is just HTTP requests/responses, why do we only use browsers to interface with web applications? Are there any other options?
+
+We overwhelmingly use web browsers because they made the web easier to use when they were first invented in the early 1990s, they grew and advanced alongside the explosion of the Internet and both clients and servers have become happily dependent on them.  Curl can be used for working with HTTP from the command line.
+
+
+
+7. What is MVC, and why is it important?
+
+MVC stands for Model-View-Controller and is a software design pattern.  The Model represents the data and is independent of the controller or the view.  The View translates data into a visual rendering to the Client.  The Controller translates incoming requests into outgoing responses and mediates between the model and the view.
+
+MVC is important because it compartamentalizes code making it easier to understand and less susceptible to widespread failure.
+
+
+
+The below questions are about Sinatra:
+
+1. At a high level, how are requests processed?
+
+Through a controller, which can either redirect to a new request or render a view.
+
+
+
+2. In the controller/action, what's the difference between rendering and redirecting?
+
+Rendering shows a new view to the browser and puts the ball in the client's court whereas redirecting creates a new request which will ultimately end up in a new view but not rightaway.
+
+
+
+3. In the ERB view template, how do you show dynamic content?
+
+With <% %> or <%= %>
+
+
+
+4. Given what you know about ERB templates, when do you suppose the ERB template is turned into HTML?
+
+By the controller.
+
+
+
+5. What's the role of instance variables in Sinatra?
+
+They help to emulate a memory of sorts in the stateless protocol that is HTTP.  Instance variables set in a route can be accessed by templates.
