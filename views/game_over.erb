@@ -1,0 +1,1 @@
+<h2>Thanks for playing <%=session[:player_name]%>!  You finished with $<%=(session[:money_amt]).to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse%>.</h2>

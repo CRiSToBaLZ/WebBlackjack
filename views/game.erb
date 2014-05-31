@@ -1,25 +1,35 @@
 <div id='game'>
+
+<!-- <h1><center>Blackjack</center><h1> -->
+  
+  
   <div class="container">
     <%if @losing %>
       <h3><div class="alert alert-error"><%=@losing%></div></h3>
-    <% end %>
-	<%if @winning %>
+	<%elsif @winning %>
 		<h3><div class="alert alert-success"><%=@winning%></div></h3>
-	<% end %>
-	<%if @equal %>
+	<%elsif @equal %>
 		<h3><div class="alert alert-warning"><%=@equal%></div></h3>
+	<%elsif @info %>
+		<h3><div class="alert alert-info"><%=@info%></div></h3>
+	<%else %>
+		<h3><div class="alert alert-info"><%=session[:player_name]%> has $<%=(session[:money_amt]).to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse%> and bet $<%=(session[:bet_amt]).to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse%> this round.<%=@info%></div></h3>
 	<% end %>
   </div>
-<!-- <h1>Blackjack!</h1> -->
-
-<% if @welcome %>
-	<h2>Welcome <%= session[:player_name] %>.</h2>
-<% end %>
 
 
 <div class = "well" id ='dealer_area'>
-<h3>Dealer's hand:</h3>
-	<% if @dealer_show_first == false %>
+<% if @joker == true %>
+	<h3>Dealer has: </h3>
+<% elsif @dealer_show_first == true %>
+	<h3>Dealer has: <%= session[:total_dealer].to_s %></h3>
+<% else %>
+	<h3>Dealer has:</h3>
+<% end %>
+<!-- <h3>Dealer's hand:</h3> -->
+	<% if @joker == true %>
+	    <img src='/images/cards/joker_black.jpg' class='card_image'>
+	<% elsif @dealer_show_first == false %>
 	    <img src='/images/cards/cover.jpg' class='card_image'>
 		<% 1.upto(session[:hand_dealer].length-1) do |i| %>
 			<%= display_card(session[:hand_dealer][i]) %>
@@ -28,25 +38,28 @@
 		<% 0.upto(session[:hand_dealer].length-1) do |i| %>
 			<%= display_card(session[:hand_dealer][i]) %>
 		<% end %>
-	<% end %>
-
-<% if @dealer_show_first == true %>
-	<h3>Dealer's total is <%= session[:total_dealer].to_s %></h3>
 <% end %>
-	
+
+		
 
 
 
 </div>
 
-<br/>
+<!-- <br/> -->
 
 <div class = "well" id ='player_area'>
-<h3><%= session[:player_name] %>'s hand:</h3>
-	<% session[:hand_player].each do |card| %>
-		<%= display_card(card) %>
-	<% end %>
-<h3><%= session[:player_name] %>'s total is <%= session[:total_player].to_s %></h3>
+<!-- <h3><%= session[:player_name] %>'s hand:</h3> -->
+<% if @joker == false %>
+	<h3><%= session[:player_name] %> has: <%= session[:total_player].to_s %></h3>
+		<% session[:hand_player].each do |card| %>
+			<%= display_card(card) %>
+		<% end %>
+<% else%>
+	<h3><%= session[:player_name] %> has: </h3>
+	    <img src='/images/cards/joker_red.jpg' class='card_image'>
+<% end %>
+		
 </div>
 
 
@@ -75,10 +88,23 @@
 <% end %>
 
 <% if @play_again_button %>
-	<form id = "play_again" action="/" method="POST">
-		<input type = "submit" value = "Play Again" class = "btn btn-primary btn-large"/>
+	<h3>Would you like to play again?</h3>
+	<form id = "play_again" action="/play_again" method="POST">
+		<input type = "submit" value = "Yes" class = "btn btn-primary btn-large"/>
 	</form>
+ 	<a href="/game_over" class="btn btn-danger btn-large"> No</a>
 <% end %>
+
+<% if @inside_bet %>
+	<h3>How much would you like to bet?</h3>
+	<form action="/bet" method="post">
+		<input type="text" name="bet_amt"/>
+		<br/>
+		<input type="submit" value = "Submit" class="btn"/>
+	</form>
+
+<% end %>
+
 
 </p>
 </div>

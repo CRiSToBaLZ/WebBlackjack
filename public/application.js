@@ -47,3 +47,17 @@ $(document).ready(function() {
 });
 
 
+$(document).ready(function() {	
+
+	$(document).on('click', '#play_again input', function() {
+		$.ajax({
+			type: 'POST',
+			url: '/play_again'
+		}).done(function(msg) {
+			$('#game').replaceWith(msg);
+		});
+		return false;
+	});
+
+
+});

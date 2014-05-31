@@ -8,22 +8,31 @@ form#stay {
 }
 
 
+form#play_again {
+	float: left;
+	margin-right: 10px;
+}
+
+form#play_stop {
+	float: left;
+}
+
+
 img.card_image {
 	margin: 0px 5px 5px 0px;
 }
 
 body {
-  background-color: #FAF9F5;
-  color: #48362A;
+  background-color: #FAFAFA;
 }
 
 .well {
   border-radius: 10px;
-  background-color: #E5E3D8;
+  background-color: #E5E5E5;
 }
 
 .navbar-inner {
-background-color: #E5E3D8;
+background-color: #E5E5E5;
 color: #48362A;
 background-image: none;
 box-shadow: none;

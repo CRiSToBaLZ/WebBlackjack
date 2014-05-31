@@ -61,14 +61,13 @@ end
 def winner!(msg)
   @hit_stay_buttons = false
   @play_again_button = true
-  session[:money_amt] += session[:bet_amt]*2
+  session[:money_amt] += session[:bet_amt]
   @winning = "#{session[:player_name]} wins!  #{msg}  #{session[:player_name]} now has $#{session[:money_amt].to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse}." 
 end
 
 def tied!(msg)
   @hit_stay_buttons = false
   @play_again_button = true
-  session[:money_amt] += session[:bet_amt]
   @equal = "#{msg}  #{session[:player_name]} has $#{session[:money_amt].to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse}." 
   # binding.pry  
 end
@@ -76,11 +75,14 @@ end
 def loser!(msg)
   @hit_stay_buttons = false
   @play_again_button = true
+  session[:money_amt] -= session[:bet_amt]
   @losing = "#{session[:player_name]} loses.  #{msg}  #{session[:player_name]} now has $#{session[:money_amt].to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse}."
 end
 
-
-     
+def inform!(msg)
+  @info = "#{msg}"
+end
+  
 end
 
 before do
@@ -89,6 +91,8 @@ before do
   @play_again_button = false
   @dealer_show_first = false
   @welcome = false
+  @inside_bet = false
+  @joker = false
 end
 
 post '/' do
@@ -96,7 +100,9 @@ post '/' do
 end
 
 get '/' do
-  if session[:player_name]
+  if session[:player_name] and session[:money_amt] == 0
+    redirect '/new_player'
+  elsif session[:player_name]
     redirect '/bet'
   else
     redirect '/new_player'
@@ -131,7 +137,6 @@ post '/bet' do
     halt erb(:bet)
   end
   session[:bet_amt] = params[:bet_amt].to_i
-  session[:money_amt] = session[:money_amt] - session[:bet_amt]
   redirect '/game'
 end
 
@@ -151,8 +156,8 @@ get '/game' do
   session[:hand_player] << session[:deck].pop
   session[:hand_dealer] << session[:deck].pop
   session[:hand_player] << session[:deck].pop
-  # session[:hand_player] = [["5","C"], ["7","H"]] ##testing lineeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-  # session[:hand_dealer] = [["3","S"], ["4","D"]] ##testing lineeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+  # session[:hand_player] = [["A","C"], ["J","H"]] ##testing lineeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+  # session[:hand_dealer] = [["4","S"], ["9","D"]] ##testing lineeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
   
 
   session[:total_player] = total(session[:hand_player])
@@ -160,7 +165,6 @@ get '/game' do
   
   if session[:total_player] == 21
     winner!("#{session[:player_name]} hit Blackjack.")
-    
   end
   erb :game
 end
@@ -193,7 +197,7 @@ post '/game/player/stay' do
     @dealer_show_buttons = true
     @dealer_show_first = true
   end
-  erb :game
+  erb :game, layout: false
 end
 
 post '/game/dealer/hit' do
@@ -202,7 +206,7 @@ post '/game/dealer/hit' do
   while session[:total_dealer] < 17
     @dealer_show_buttons = true
     new_card = session[:deck].pop
-    # new_card = ["5","H"] ##testing line
+    # new_card = ["8","H"] ##testing line
     session[:hand_dealer] << new_card
     session[:total_dealer] = total(session[:hand_dealer])
     if session[:total_dealer] > 21
@@ -210,6 +214,7 @@ post '/game/dealer/hit' do
         winner!("Dealer busted.")
     elsif session[:total_dealer] == 21
       @dealer_show_buttons = false
+      loser!("Blackjack dealer.")
     elsif session[:total_dealer] >= 17 and session[:total_dealer] < 21
       @dealer_show_buttons = false
       redirect '/game/comparison'
@@ -230,5 +235,19 @@ get '/game/comparison' do
   erb :game
 end
 
+post '/play_again' do
+  @joker = true
+  @dealer_show_first = true
+  @hit_stay_buttons = false
+  @inside_bet = true
+  inform!("Joe has $#{session[:money_amt].to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse}.")
+  halt erb(:game)
+end
 
-  
+get '/rules' do
+  erb :rules, layout: false
+end
+
+get '/game_over' do
+  erb :game_over
+end
