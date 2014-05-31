@@ -236,6 +236,9 @@ get '/game/comparison' do
 end
 
 post '/play_again' do
+  if session[:money_amt] == 0
+    redirect '/game_over'
+  end
   @joker = true
   @dealer_show_first = true
   @hit_stay_buttons = false
